@@ -1,0 +1,69 @@
+import random
+import time
+import matplotlib.pyplot as plt
+from collections import deque
+# Embedded System Configuration
+MAX_TEMP = 40
+MAX_VOLTAGE = 5.5
+# Data storage
+temperature_data = deque(maxlen=30)
+voltage_data = deque(maxlen=30)
+current_data = deque(maxlen=30)
+time_data = deque(maxlen=30)
+fan_status = False
+sample = 0
+plt.ion()
+fig, ax = plt.subplots(3, 1, figsize=(10, 8))
+fig.suptitle("SMART EMBEDDED SYSTEM MONITOR")
+while True:
+    sample += 1
+  # Simulated sensor readings# 
+    temperature = random.uniform(25, 50)
+    voltage = random.uniform(3.0, 5.0)
+    current = random.uniform(0.1, 2.0)
+    # Automatic fan control
+    if temperature >= MAX_TEMP:
+        fan_status = True
+    else:
+        fan_status = False
+    # Store sensor data
+    time_data.append(sample)
+    temperature_data.append(temperature)
+    voltage_data.append(voltage)
+    current_data.append(current)
+    # Clear dashboard
+    for chart in ax:
+        chart.clear()
+    # Temperature graph
+    ax[0].plot(time_data, temperature_data,
+               color="red", marker="o")
+    ax[0].axhline(MAX_TEMP, linestyle="--",
+                  color="black", label="Temperature Limit")
+    ax[0].set_title("Temperature Monitoring")
+    ax[0].set_ylabel("Temperature (C)")
+    ax[0].legend()
+    # Voltage graph
+    ax[1].plot(time_data, voltage_data,
+               color="blue", marker="o")
+    ax[1].axhline(MAX_VOLTAGE, linestyle="--",
+                  color="black")
+    ax[1].set_title("Voltage Monitoring")
+    ax[1].set_ylabel("Voltage (V)")
+    # Current graph
+    ax[2].plot(time_data, current_data,
+               color="green", marker="o")
+    ax[2].set_title("Current Monitoring")
+    ax[2].set_ylabel("Current (A)")
+    ax[2].set_xlabel("Sample Number")
+    plt.tight_layout()
+    plt.pause(0.1)
+    # Terminal output
+    print("\n------ EMBEDDED SYSTEM STATUS ------")
+    print(f"Temperature : {temperature:.2f} C")
+    print(f"Voltage     : {voltage:.2f} V")
+    print(f"Current     : {current:.2f} A")
+    print(f"Cooling Fan : {'ON' if fan_status else 'OFF'}")
+    if temperature >= MAX_TEMP:
+        print("WARNING: HIGH TEMPERATURE!")
+    time.sleep(1)
+</>Python
